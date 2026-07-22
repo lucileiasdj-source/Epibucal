@@ -17,6 +17,8 @@ import {
   ShieldAlert,
   Activity,
   Calculator,
+  Search,
+  Upload,
 } from 'lucide-react';
 
 const DENTES_SUPERIORES = [18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28];
@@ -150,6 +152,15 @@ type OfflineExam = {
 };
 
 const OFFLINE_EXAMS_KEY = 'epibucal_offline_exams';
+const PARTICIPANTS_KEY = 'epibucal_participants';
+
+type ImportedParticipant = {
+  id: string;
+  nome: string;
+  idade: string;
+  sexo: string;
+  escola: string;
+};
 
 function readOfflineExams(): OfflineExam[] {
   try {
@@ -162,6 +173,91 @@ function readOfflineExams(): OfflineExam[] {
 
 function writeOfflineExams(exams: OfflineExam[]) {
   localStorage.setItem(OFFLINE_EXAMS_KEY, JSON.stringify(exams));
+}
+
+function readParticipants(): ImportedParticipant[] {
+  try {
+    const stored = localStorage.getItem(PARTICIPANTS_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeParticipants(participants: ImportedParticipant[]) {
+  localStorage.setItem(PARTICIPANTS_KEY, JSON.stringify(participants));
+}
+
+function normalizeHeader(value: string) {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '');
+}
+
+function splitCsvLine(line: string, delimiter: string) {
+  const values: string[] = [];
+  let current = '';
+  let quoted = false;
+
+  for (let i = 0; i < line.length; i += 1) {
+    const char = line[i];
+    const next = line[i + 1];
+
+    if (char === '"' && quoted && next === '"') {
+      current += '"';
+      i += 1;
+    } else if (char === '"') {
+      quoted = !quoted;
+    } else if (char === delimiter && !quoted) {
+      values.push(current.trim());
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+
+  values.push(current.trim());
+  return values.map((value) => value.replace(/^"|"$/g, ''));
+}
+
+function parseParticipantsCsv(text: string): ImportedParticipant[] {
+  const lines = text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  if (lines.length < 2) return [];
+
+  const firstLine = lines[0];
+  const delimiter = firstLine.includes(';') ? ';' : firstLine.includes('\t') ? '\t' : ',';
+  const headers = splitCsvLine(firstLine, delimiter).map(normalizeHeader);
+
+  const findIndex = (candidates: string[]) =>
+    headers.findIndex((header) => candidates.some((candidate) => header.includes(candidate)));
+
+  const idIndex = findIndex(['idparticipante', 'id', 'codigo', 'codigoparticipante']);
+  const nomeIndex = findIndex(['nomecompleto', 'nomedoparticipante', 'participante', 'nome']);
+  const idadeIndex = findIndex(['idade']);
+  const sexoIndex = findIndex(['sexo', 'genero']);
+  const escolaIndex = findIndex(['escola', 'unidade', 'instituicao']);
+
+  if (idIndex < 0) return [];
+
+  return lines.slice(1).map((line) => {
+    const values = splitCsvLine(line, delimiter);
+    const rawSexo = sexoIndex >= 0 ? values[sexoIndex]?.trim() ?? '' : '';
+    const sexo = rawSexo.toLowerCase().startsWith('m')
+      ? 'M'
+      : rawSexo.toLowerCase().startsWith('f')
+      ? 'F'
+      : rawSexo;
+
+    return {
+      id: values[idIndex]?.trim() ?? '',
+      nome: nomeIndex >= 0 ? values[nomeIndex]?.trim() ?? '' : '',
+      idade: idadeIndex >= 0 ? values[idadeIndex]?.trim() ?? '' : '',
+      sexo,
+      escola: escolaIndex >= 0 ? values[escolaIndex]?.trim() ?? '' : '',
+    };
+  }).filter((participant) => participant.id);
 }
 
 function isNetworkError(err: unknown) {
@@ -343,11 +439,14 @@ export default function App() {
   const [isOnline, setIsOnline] = useState(() => navigator.onLine);
   const [pendingOfflineExams, setPendingOfflineExams] = useState(() => readOfflineExams());
   const [showPendingOfflineList, setShowPendingOfflineList] = useState(false);
+  const [importedParticipants, setImportedParticipants] = useState(() => readParticipants());
+  const [participantSearchId, setParticipantSearchId] = useState('');
 
   // ACCESS_TRACKING_DISABLED: re-enable when monitoring is reactivated
   // useEffect(() => { logPageLoad(); }, []);
 
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
+  const participantCsvInputRef = useRef<HTMLInputElement | null>(null);
 
   const ihosTotal = useMemo(() => {
     const validScores = IHOS_TEETH.map((t) => ihos[t]).filter((v) => v !== 9);
@@ -460,6 +559,58 @@ export default function App() {
     downloadCsv(csv, `exames_offline_epibucal_${new Date().toISOString().split('T')[0]}.csv`);
     setPendingOfflineExams(pending);
     showNotification({ type: 'success', message: `${pending.length} exame(s) offline exportado(s)!` });
+  }, [showNotification]);
+
+  const fillParticipantFromImport = useCallback((participant: ImportedParticipant) => {
+    setIdParticipante(participant.id);
+    setParticipantId(participant.nome);
+    setAge(participant.idade);
+    setSex(participant.sexo);
+    setSchool(participant.escola);
+    showNotification({ type: 'success', message: `Participante ${participant.id} carregado.` });
+    scrollToSection('identification');
+  }, [showNotification]);
+
+  const handleFindParticipant = useCallback(() => {
+    const searchId = participantSearchId.trim() || idParticipante.trim();
+    if (!searchId) {
+      showNotification({ type: 'error', message: 'Digite o ID do participante para buscar.' });
+      return;
+    }
+
+    const participant = importedParticipants.find((item) => item.id === searchId);
+    if (!participant) {
+      showNotification({ type: 'error', message: `ID ${searchId} não encontrado na lista importada.` });
+      return;
+    }
+
+    fillParticipantFromImport(participant);
+  }, [fillParticipantFromImport, idParticipante, importedParticipants, participantSearchId, showNotification]);
+
+  const handleParticipantCsvImport = useCallback(async (file: File | null) => {
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const imported = parseParticipantsCsv(text);
+
+      if (imported.length === 0) {
+        showNotification({ type: 'error', message: 'Não encontrei uma coluna de ID no CSV importado.' });
+        return;
+      }
+
+      const existingById = new Map(readParticipants().map((participant) => [participant.id, participant]));
+      imported.forEach((participant) => existingById.set(participant.id, participant));
+      const merged = Array.from(existingById.values());
+
+      writeParticipants(merged);
+      setImportedParticipants(merged);
+      showNotification({ type: 'success', message: `${imported.length} participante(s) importado(s).` });
+    } catch {
+      showNotification({ type: 'error', message: 'Erro ao ler o CSV de participantes.' });
+    } finally {
+      if (participantCsvInputRef.current) participantCsvInputRef.current.value = '';
+    }
   }, [showNotification]);
 
   useEffect(() => {
@@ -1043,6 +1194,56 @@ export default function App() {
             )}
           </section>
         )}
+
+        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="flex items-center gap-2 px-5 py-3 bg-sky-700 text-white">
+            <Search className="w-4 h-4" />
+            <h2 className="text-sm font-bold uppercase tracking-wider">
+              Buscar participante por ID
+            </h2>
+          </div>
+          <div className="p-5 space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_auto] gap-3">
+              <input
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent tabular-nums"
+                placeholder="Digite o ID do participante"
+                value={participantSearchId}
+                onChange={(e) => setParticipantSearchId(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleFindParticipant();
+                }}
+              />
+              <button
+                type="button"
+                onClick={handleFindParticipant}
+                className="inline-flex items-center justify-center gap-2 bg-sky-700 hover:bg-sky-800 active:bg-sky-900 text-white px-5 py-3 rounded-xl font-bold text-sm transition-colors"
+              >
+                <Search className="w-4 h-4" />
+                Buscar
+              </button>
+              <button
+                type="button"
+                onClick={() => participantCsvInputRef.current?.click()}
+                className="inline-flex items-center justify-center gap-2 border-2 border-gray-200 bg-white hover:bg-gray-50 active:bg-gray-100 text-gray-700 px-5 py-3 rounded-xl font-bold text-sm transition-colors"
+              >
+                <Upload className="w-4 h-4" />
+                Importar CSV
+              </button>
+            </div>
+            <input
+              ref={participantCsvInputRef}
+              type="file"
+              accept=".csv,text/csv,.txt"
+              className="hidden"
+              onChange={(e) => handleParticipantCsvImport(e.target.files?.[0] ?? null)}
+            />
+            <p className="text-xs text-gray-500">
+              {importedParticipants.length > 0
+                ? `${importedParticipants.length} participante(s) disponíveis para busca neste aparelho.`
+                : 'Importe o CSV da planilha de respostas do Google Forms para preencher identificação automaticamente.'}
+            </p>
+          </div>
+        </section>
 
         {false && (!isOnline || pendingOfflineExams.length > 0) && (
           <section className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-4">
