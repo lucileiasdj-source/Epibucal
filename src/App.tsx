@@ -170,6 +170,96 @@ function isNetworkError(err: unknown) {
   return /failed to fetch|networkerror|load failed|internet|offline/i.test(message);
 }
 
+function valueFromPayload(payload: ClinicalExamPayload, key: string) {
+  const value = payload[key];
+  return value === null || value === undefined ? '' : String(value);
+}
+
+function downloadCsv(csv: string, filename: string) {
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function buildCsvFromPayloads(payloads: ClinicalExamPayload[]) {
+  const header = [
+    'id_participante',
+    'participante',
+    'idade',
+    'sexo',
+    'escola',
+    'examinador',
+    'data_coleta',
+    'ihos_16',
+    'ihos_11',
+    'ihos_26',
+    'ihos_31',
+    'ihos_36',
+    'ihos_46',
+    'ihos_total',
+    ...DENTES_SUPERIORES.map((t) => `d${t}`),
+    ...DENTES_INFERIORES.map((t) => `d${t}`),
+    'uso_protese_superior',
+    'uso_protese_inferior',
+    'necessidade_protese_superior',
+    'necessidade_protese_inferior',
+    'urgencia_tratamento',
+    'c_total',
+    'p_total',
+    'o_total',
+    'cpod_total',
+    's_total',
+    'pr_total',
+  ].join(';');
+
+  const allTeethNumbers = [...DENTES_SUPERIORES, ...DENTES_INFERIORES];
+  const rows = payloads.map((payload) => {
+    const toothMap: Record<number, number> = {};
+    payload.dentes.forEach((r) => {
+      toothMap[r.numero_dente] = r.codigo_coroa;
+    });
+
+    const sTotal = allTeethNumbers.filter((t) => toothMap[t] === 6).length;
+    const prTotal = allTeethNumbers.filter((t) => toothMap[t] === 7).length;
+
+    return [
+      valueFromPayload(payload, 'id_participante'),
+      valueFromPayload(payload, 'participante'),
+      valueFromPayload(payload, 'idade'),
+      valueFromPayload(payload, 'sexo'),
+      valueFromPayload(payload, 'escola'),
+      valueFromPayload(payload, 'examinador'),
+      valueFromPayload(payload, 'data_coleta'),
+      valueFromPayload(payload, 'ihos_16'),
+      valueFromPayload(payload, 'ihos_11'),
+      valueFromPayload(payload, 'ihos_26'),
+      valueFromPayload(payload, 'ihos_31'),
+      valueFromPayload(payload, 'ihos_36'),
+      valueFromPayload(payload, 'ihos_46'),
+      valueFromPayload(payload, 'ihos_total'),
+      ...DENTES_SUPERIORES.map((t) => toothMap[t] ?? ''),
+      ...DENTES_INFERIORES.map((t) => toothMap[t] ?? ''),
+      valueFromPayload(payload, 'uso_protese_superior'),
+      valueFromPayload(payload, 'uso_protese_inferior'),
+      valueFromPayload(payload, 'necessidade_protese_superior'),
+      valueFromPayload(payload, 'necessidade_protese_inferior'),
+      valueFromPayload(payload, 'urgencia_tratamento'),
+      valueFromPayload(payload, 'c_total'),
+      valueFromPayload(payload, 'p_total'),
+      valueFromPayload(payload, 'o_total'),
+      valueFromPayload(payload, 'cpod_total'),
+      sTotal,
+      prTotal,
+    ].join(';');
+  });
+
+  return [header, ...rows].join('\n');
+}
+
 const ToothIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M12 2C9 2 6 4 6 7c0 1.5.5 3 1 4.5L8 20c.3 1.2 1 2 2 2h4c1 0 1.7-.8 2-2l1-8.5c.5-1.5 1-3 1-4.5 0-3-3-5-6-5z" />
@@ -251,7 +341,8 @@ export default function App() {
   const [showClearSavedConfirm, setShowClearSavedConfirm] = useState(false);
   const [clearingSaved, setClearingSaved] = useState(false);
   const [isOnline, setIsOnline] = useState(() => navigator.onLine);
-  const [pendingOfflineExams, setPendingOfflineExams] = useState(() => readOfflineExams().length);
+  const [pendingOfflineExams, setPendingOfflineExams] = useState(() => readOfflineExams());
+  const [showPendingOfflineList, setShowPendingOfflineList] = useState(false);
 
   // ACCESS_TRACKING_DISABLED: re-enable when monitoring is reactivated
   // useEffect(() => { logPageLoad(); }, []);
@@ -295,7 +386,7 @@ export default function App() {
   }, []);
 
   const refreshPendingOfflineExams = useCallback(() => {
-    setPendingOfflineExams(readOfflineExams().length);
+    setPendingOfflineExams(readOfflineExams());
   }, []);
 
   const saveClinicalExamOnline = useCallback(async (payload: ClinicalExamPayload) => {
@@ -329,7 +420,7 @@ export default function App() {
       payload,
     });
     writeOfflineExams(pending);
-    setPendingOfflineExams(pending.length);
+    setPendingOfflineExams(pending);
   }, []);
 
   const syncOfflineExams = useCallback(async (silent = false) => {
@@ -350,13 +441,26 @@ export default function App() {
     }
 
     writeOfflineExams(stillPending);
-    setPendingOfflineExams(stillPending.length);
+    setPendingOfflineExams(stillPending);
 
     if (!silent && synced > 0) {
       const remaining = stillPending.length > 0 ? ` ${stillPending.length} ainda pendente(s).` : '';
       showNotification({ type: 'success', message: `${synced} exame(s) offline sincronizado(s).${remaining}` });
     }
   }, [saveClinicalExamOnline, showNotification]);
+
+  const handleExportOfflineCSV = useCallback(() => {
+    const pending = readOfflineExams();
+    if (pending.length === 0) {
+      showNotification({ type: 'error', message: 'Nenhum exame offline pendente para exportar.' });
+      return;
+    }
+
+    const csv = buildCsvFromPayloads(pending.map((exam) => exam.payload));
+    downloadCsv(csv, `exames_offline_epibucal_${new Date().toISOString().split('T')[0]}.csv`);
+    setPendingOfflineExams(pending);
+    showNotification({ type: 'success', message: `${pending.length} exame(s) offline exportado(s)!` });
+  }, [showNotification]);
 
   useEffect(() => {
     refreshPendingOfflineExams();
@@ -869,8 +973,79 @@ export default function App() {
           </div>
         </header>
 
-        {(!isOnline || pendingOfflineExams > 0) && (
-          <section className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        {(!isOnline || pendingOfflineExams.length > 0) && (
+          <section className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
+                <div>
+                  <p className="text-sm font-bold text-amber-900">
+                    {!isOnline
+                      ? 'Modo offline ativo'
+                      : `${pendingOfflineExams.length} exame(s) aguardando sincronização`}
+                  </p>
+                  <p className="text-xs text-amber-700 mt-1">
+                    {!isOnline
+                      ? 'Os exames salvos agora ficarão guardados neste aparelho até a internet voltar.'
+                      : 'Os dados estão guardados neste aparelho e serão enviados quando houver internet.'}
+                  </p>
+                </div>
+              </div>
+
+              {pendingOfflineExams.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowPendingOfflineList((value) => !value)}
+                    className="inline-flex items-center justify-center gap-2 border border-amber-300 bg-white hover:bg-amber-100 active:bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold text-sm transition-colors"
+                  >
+                    <ClipboardList className="w-4 h-4" />
+                    {showPendingOfflineList ? 'Ocultar lista' : 'Ver pendentes'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleExportOfflineCSV}
+                    className="inline-flex items-center justify-center gap-2 border border-amber-300 bg-white hover:bg-amber-100 active:bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold text-sm transition-colors"
+                  >
+                    <Download className="w-4 h-4" />
+                    Exportar offline
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => syncOfflineExams()}
+                    disabled={!isOnline}
+                    className="inline-flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white px-4 py-2 rounded-lg font-bold text-sm transition-colors disabled:bg-amber-300"
+                  >
+                    <Save className="w-4 h-4" />
+                    Sincronizar agora
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {showPendingOfflineList && pendingOfflineExams.length > 0 && (
+              <div className="border border-amber-200 rounded-lg overflow-hidden bg-white">
+                <div className="grid grid-cols-[80px_1fr_110px] gap-2 px-3 py-2 bg-amber-100 text-xs font-bold text-amber-900">
+                  <span>ID</span>
+                  <span>Participante</span>
+                  <span>Salvo em</span>
+                </div>
+                <div className="divide-y divide-amber-100">
+                  {pendingOfflineExams.map((exam) => (
+                    <div key={exam.id} className="grid grid-cols-[80px_1fr_110px] gap-2 px-3 py-2 text-xs text-amber-900">
+                      <span className="tabular-nums truncate">{valueFromPayload(exam.payload, 'id_participante') || '-'}</span>
+                      <span className="truncate">{exam.payload.participante || '-'}</span>
+                      <span className="tabular-nums">{new Date(exam.createdAt).toLocaleDateString('pt-BR')}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </section>
+        )}
+
+        {false && (!isOnline || pendingOfflineExams.length > 0) && (
+          <section className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-4">
             <div className="flex items-start gap-3">
               <AlertCircle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
               <div>
@@ -886,7 +1061,7 @@ export default function App() {
                 </p>
               </div>
             </div>
-            {pendingOfflineExams > 0 && (
+            {pendingOfflineExams.length > 0 && (
               <button
                 type="button"
                 onClick={() => syncOfflineExams()}
