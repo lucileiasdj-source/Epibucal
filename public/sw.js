@@ -1,10 +1,14 @@
-var CACHE_NAME = 'saudebucalapp-v2';
+var CACHE_NAME = 'epibucal-offline-v3';
 
 var PRECACHE_URLS = [
   '/',
   '/index.html',
   '/manifest.json',
   '/imagemicone.png',
+  '/icon-192.png',
+  '/icon-512.png',
+  '/image.png',
+  '/image copy.png',
 ];
 
 self.addEventListener('install', function(event) {

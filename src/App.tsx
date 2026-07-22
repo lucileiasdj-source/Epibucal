@@ -1,7 +1,5 @@
-import { useState, useCallback, useMemo, useRef } from 'react';
+import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { supabase } from './lib/supabase';
-import { logPageLoad, logTabNavigation } from './lib/accessTracking';
-import { AdminPanel } from './components/AdminPanel';
 import { InstallBanner, InstallHeaderButton } from './components/InstallBanner';
 import { IhosSelect } from './components/IhosSelect';
 import {
@@ -19,8 +17,6 @@ import {
   ShieldAlert,
   Activity,
   Calculator,
-  ArrowDown,
-  Settings,
 } from 'lucide-react';
 
 const DENTES_SUPERIORES = [18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28];
@@ -142,6 +138,38 @@ type Notification = {
   message: string;
 } | null;
 
+type ClinicalExamPayload = Record<string, unknown> & {
+  participante: string;
+  dentes: { numero_dente: number; codigo_coroa: number }[];
+};
+
+type OfflineExam = {
+  id: string;
+  createdAt: string;
+  payload: ClinicalExamPayload;
+};
+
+const OFFLINE_EXAMS_KEY = 'epibucal_offline_exams';
+
+function readOfflineExams(): OfflineExam[] {
+  try {
+    const stored = localStorage.getItem(OFFLINE_EXAMS_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeOfflineExams(exams: OfflineExam[]) {
+  localStorage.setItem(OFFLINE_EXAMS_KEY, JSON.stringify(exams));
+}
+
+function isNetworkError(err: unknown) {
+  if (!navigator.onLine) return true;
+  const message = err instanceof Error ? err.message : String(err);
+  return /failed to fetch|networkerror|load failed|internet|offline/i.test(message);
+}
+
 const ToothIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M12 2C9 2 6 4 6 7c0 1.5.5 3 1 4.5L8 20c.3 1.2 1 2 2 2h4c1 0 1.7-.8 2-2l1-8.5c.5-1.5 1-3 1-4.5 0-3-3-5-6-5z" />
@@ -222,12 +250,12 @@ export default function App() {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [showClearSavedConfirm, setShowClearSavedConfirm] = useState(false);
   const [clearingSaved, setClearingSaved] = useState(false);
-  const [showAdmin, setShowAdmin] = useState(false);
+  const [pendingOfflineExams, setPendingOfflineExams] = useState(() => readOfflineExams().length);
 
   // ACCESS_TRACKING_DISABLED: re-enable when monitoring is reactivated
   // useEffect(() => { logPageLoad(); }, []);
 
-  const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
 
   const ihosTotal = useMemo(() => {
     const validScores = IHOS_TEETH.map((t) => ihos[t]).filter((v) => v !== 9);
@@ -265,9 +293,83 @@ export default function App() {
     setTimeout(() => setNotification(null), 4000);
   }, []);
 
+  const refreshPendingOfflineExams = useCallback(() => {
+    setPendingOfflineExams(readOfflineExams().length);
+  }, []);
+
+  const saveClinicalExamOnline = useCallback(async (payload: ClinicalExamPayload) => {
+    const fnUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/save-clinical-exam`;
+    const response = await fetch(fnUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      const detail = result.details
+        ? result.details.map((d: { field: string; message: string }) => d.message).join(' ')
+        : result.error ?? 'Erro ao salvar exame.';
+      throw new Error(detail);
+    }
+
+    return result;
+  }, []);
+
+  const queueOfflineExam = useCallback((payload: ClinicalExamPayload) => {
+    const pending = readOfflineExams();
+    pending.push({
+      id: crypto.randomUUID(),
+      createdAt: new Date().toISOString(),
+      payload,
+    });
+    writeOfflineExams(pending);
+    setPendingOfflineExams(pending.length);
+  }, []);
+
+  const syncOfflineExams = useCallback(async (silent = false) => {
+    const pending = readOfflineExams();
+    if (pending.length === 0 || !navigator.onLine) return;
+
+    const stillPending: OfflineExam[] = [];
+    let synced = 0;
+
+    for (const exam of pending) {
+      try {
+        await saveClinicalExamOnline(exam.payload);
+        synced += 1;
+      } catch (err) {
+        stillPending.push(exam);
+        if (isNetworkError(err)) break;
+      }
+    }
+
+    writeOfflineExams(stillPending);
+    setPendingOfflineExams(stillPending.length);
+
+    if (!silent && synced > 0) {
+      const remaining = stillPending.length > 0 ? ` ${stillPending.length} ainda pendente(s).` : '';
+      showNotification({ type: 'success', message: `${synced} exame(s) offline sincronizado(s).${remaining}` });
+    }
+  }, [saveClinicalExamOnline, showNotification]);
+
+  useEffect(() => {
+    refreshPendingOfflineExams();
+    const handleOnline = () => {
+      syncOfflineExams();
+    };
+    window.addEventListener('online', handleOnline);
+    syncOfflineExams(true);
+    return () => window.removeEventListener('online', handleOnline);
+  }, [refreshPendingOfflineExams, syncOfflineExams]);
+
   const scrollToSection = (id: string) => {
     sectionRefs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    // ACCESS_TRACKING_DISABLED: const section = SECTIONS.find(s => s.id === id); if (section) logTabNavigation(section.label);
+    // ACCESS_TRACKING_DISABLED: add tab navigation tracking here when monitoring is reactivated.
   };
 
   const handleToothChange = (toothNumber: number, code: number) => {
@@ -353,7 +455,7 @@ export default function App() {
     console.log('=== SAVE EXAM START ===');
 
     try {
-      const payload = {
+      const payload: ClinicalExamPayload = {
         id_participante: parseInt(idParticipante),
         participante: participantId.trim(),
         idade: parseInt(age),
@@ -383,24 +485,18 @@ export default function App() {
         })),
       };
 
-      const fnUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/save-clinical-exam`;
-      const response = await fetch(fnUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        const detail = result.details
-          ? result.details.map((d: { field: string; message: string }) => d.message).join(' ')
-          : result.error ?? 'Erro ao salvar exame.';
-        throw new Error(detail);
+      if (!navigator.onLine) {
+        queueOfflineExam(payload);
+        showNotification({
+          type: 'success',
+          message: `Sem internet: exame ${payload.participante} guardado no aparelho para sincronizar depois.`
+        });
+        resetForm();
+        scrollToSection('identification');
+        return;
       }
+
+      const result = await saveClinicalExamOnline(payload);
 
       showNotification({
         type: 'success',
@@ -411,6 +507,45 @@ export default function App() {
       scrollToSection('identification');
     } catch (err) {
       console.error('=== SAVE ERROR ===', err);
+      if (isNetworkError(err)) {
+        const payload: ClinicalExamPayload = {
+          id_participante: parseInt(idParticipante),
+          participante: participantId.trim(),
+          idade: parseInt(age),
+          sexo: sex,
+          escola: school.trim(),
+          examinador: examiner.trim(),
+          data_coleta: examDate,
+          ihos_16: ihos[16],
+          ihos_11: ihos[11],
+          ihos_26: ihos[26],
+          ihos_31: ihos[31],
+          ihos_36: ihos[36],
+          ihos_46: ihos[46],
+          ihos_total: ihosTotal ?? 0,
+          uso_protese_superior: upperProsthesisUse,
+          uso_protese_inferior: lowerProsthesisUse,
+          necessidade_protese_superior: upperProsthesisNeed,
+          necessidade_protese_inferior: lowerProsthesisNeed,
+          urgencia_tratamento: treatmentUrgency,
+          c_total: cCount,
+          p_total: pCount,
+          o_total: oCount,
+          cpod_total: cpodTotal,
+          dentes: [...DENTES_SUPERIORES, ...DENTES_INFERIORES].map((n) => ({
+            numero_dente: n,
+            codigo_coroa: teeth[n],
+          })),
+        };
+        queueOfflineExam(payload);
+        showNotification({
+          type: 'success',
+          message: `Falha de conexão: exame ${payload.participante} guardado no aparelho para sincronizar depois.`
+        });
+        resetForm();
+        scrollToSection('identification');
+        return;
+      }
       const errorMessage = err instanceof Error ? err.message : 'Erro ao salvar exame.';
       showNotification({ type: 'error', message: errorMessage });
     } finally {
@@ -1174,6 +1309,30 @@ export default function App() {
             </div>
           </div>
         </section>
+
+        {pendingOfflineExams > 0 && (
+          <section className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
+              <div>
+                <p className="text-sm font-bold text-amber-900">
+                  {pendingOfflineExams} exame(s) aguardando sincronização
+                </p>
+                <p className="text-xs text-amber-700 mt-1">
+                  Os dados estão guardados neste aparelho e serão enviados quando houver internet.
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => syncOfflineExams()}
+              className="inline-flex items-center justify-center gap-2 border border-amber-300 bg-white hover:bg-amber-100 active:bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold text-sm transition-colors"
+            >
+              <Save className="w-4 h-4" />
+              Sincronizar agora
+            </button>
+          </section>
+        )}
 
         {/* Actions */}
         <section className="flex flex-col sm:flex-row gap-3 pb-8">
