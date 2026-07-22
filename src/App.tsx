@@ -153,6 +153,7 @@ type OfflineExam = {
 
 const OFFLINE_EXAMS_KEY = 'epibucal_offline_exams';
 const PARTICIPANTS_KEY = 'epibucal_participants';
+const SHOW_PARTICIPANT_LOOKUP = false;
 
 type ImportedParticipant = {
   id: string;
@@ -1195,6 +1196,7 @@ export default function App() {
           </section>
         )}
 
+        {SHOW_PARTICIPANT_LOOKUP && (
         <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="flex items-center gap-2 px-5 py-3 bg-teal-600 text-white">
             <Search className="w-4 h-4" />
@@ -1244,6 +1246,7 @@ export default function App() {
             </p>
           </div>
         </section>
+        )}
 
         {false && (!isOnline || pendingOfflineExams.length > 0) && (
           <section className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-4">
