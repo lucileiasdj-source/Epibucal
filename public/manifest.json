@@ -1,0 +1,39 @@
+{
+  "name": "SaúdeBucalApp",
+  "short_name": "SaúdeBucalApp",
+  "description": "Coleta e Analise Epidemiologica em Saude Bucal",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0f766e",
+  "background_color": "#ffffff",
+  "lang": "pt-BR",
+  "categories": ["medical", "health"],
+  "icons": [
+    {
+      "src": "/imagemicone.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/imagemicone.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/imagemicone.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/imagemicone.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

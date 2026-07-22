@@ -1,0 +1,78 @@
+Project Instructions
+
+This project is a production-ready epidemiological oral health data collection platform designed for clinical field research and public health studies.
+
+General goals:
+
+* Create a clean, professional, healthcare-grade interface.
+* Prioritize usability for field researchers using tablets and mobile devices.
+* Ensure forms are fast, responsive, and easy to complete during clinical examinations.
+* Maintain a modern and visually polished design, avoiding generic layouts.
+
+Technology stack:
+
+* React with JSX
+* Tailwind CSS
+* React hooks
+* Lucide React icons
+* Prefer native browser APIs and lightweight solutions.
+* Avoid installing unnecessary dependencies.
+
+UI/UX guidelines:
+
+* Use a clean healthcare/public health visual language.
+* Interfaces should resemble professional medical or research software.
+* Optimize readability with good spacing, typography, and contrast.
+* Forms must be intuitive and minimize input errors.
+* Mobile-first responsive design is required.
+* Use cards, sections, and step-based workflows for complex forms.
+* Include loading states, validation feedback, and success/error alerts.
+
+Data collection requirements:
+
+* Support epidemiological oral health examination forms.
+* Support structured clinical dental data entry.
+* Organize examinations by patient, examiner, and collection date.
+* Allow offline-friendly workflows whenever possible.
+* Prepare architecture for future synchronization with databases/APIs.
+* Ensure export compatibility for CSV/XLSX datasets.
+* Use standardized naming conventions for oral health variables.
+
+Code conventions:
+
+* Write modular and reusable React components.
+* Keep components small and maintainable.
+* Separate UI, logic, and data handling when possible.
+* Use descriptive variable and function names.
+* Prefer functional components and hooks.
+* Avoid duplicated code.
+* Add comments only when necessary for complex logic.
+
+Design preferences:
+
+* Professional public health and epidemiology aesthetic.
+* Avoid exaggerated animations.
+* Prefer subtle transitions and clean layouts.
+* Maintain visual consistency across all pages.
+* Use Lucide React icons only.
+
+Performance and reliability:
+
+* Optimize rendering performance for large forms.
+* Prevent unnecessary re-renders.
+* Handle form state carefully.
+* Ensure stability during long data collection sessions.
+
+Future scalability:
+
+* Structure the project so it can later support:
+
+  * authentication,
+  * cloud synchronization,
+  * dashboards,
+  * statistical analysis,
+  * multi-user access,
+  * audit trails,
+  * LGPD-compliant data handling.
+
+Always generate production-quality code.
