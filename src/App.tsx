@@ -1196,7 +1196,7 @@ export default function App() {
         )}
 
         <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="flex items-center gap-2 px-5 py-3 bg-sky-700 text-white">
+          <div className="flex items-center gap-2 px-5 py-3 bg-teal-600 text-white">
             <Search className="w-4 h-4" />
             <h2 className="text-sm font-bold uppercase tracking-wider">
               Buscar participante por ID
@@ -1205,7 +1205,7 @@ export default function App() {
           <div className="p-5 space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_auto] gap-3">
               <input
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent tabular-nums"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent tabular-nums"
                 placeholder="Digite o ID do participante"
                 value={participantSearchId}
                 onChange={(e) => setParticipantSearchId(e.target.value)}
@@ -1216,7 +1216,7 @@ export default function App() {
               <button
                 type="button"
                 onClick={handleFindParticipant}
-                className="inline-flex items-center justify-center gap-2 bg-sky-700 hover:bg-sky-800 active:bg-sky-900 text-white px-5 py-3 rounded-xl font-bold text-sm transition-colors"
+                className="inline-flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white px-5 py-3 rounded-xl font-bold text-sm transition-colors"
               >
                 <Search className="w-4 h-4" />
                 Buscar
