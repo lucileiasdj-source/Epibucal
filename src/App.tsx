@@ -250,6 +250,7 @@ export default function App() {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [showClearSavedConfirm, setShowClearSavedConfirm] = useState(false);
   const [clearingSaved, setClearingSaved] = useState(false);
+  const [isOnline, setIsOnline] = useState(() => navigator.onLine);
   const [pendingOfflineExams, setPendingOfflineExams] = useState(() => readOfflineExams().length);
 
   // ACCESS_TRACKING_DISABLED: re-enable when monitoring is reactivated
@@ -360,11 +361,20 @@ export default function App() {
   useEffect(() => {
     refreshPendingOfflineExams();
     const handleOnline = () => {
+      setIsOnline(true);
       syncOfflineExams();
     };
+    const handleOffline = () => {
+      setIsOnline(false);
+      refreshPendingOfflineExams();
+    };
     window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
     syncOfflineExams(true);
-    return () => window.removeEventListener('online', handleOnline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, [refreshPendingOfflineExams, syncOfflineExams]);
 
   const scrollToSection = (id: string) => {
@@ -859,6 +869,36 @@ export default function App() {
           </div>
         </header>
 
+        {(!isOnline || pendingOfflineExams > 0) && (
+          <section className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
+              <div>
+                <p className="text-sm font-bold text-amber-900">
+                  {!isOnline
+                    ? 'Modo offline ativo'
+                    : `${pendingOfflineExams} exame(s) aguardando sincronização`}
+                </p>
+                <p className="text-xs text-amber-700 mt-1">
+                  {!isOnline
+                    ? 'Os exames salvos agora ficarão guardados neste aparelho até a internet voltar.'
+                    : 'Os dados estão guardados neste aparelho e serão enviados quando houver internet.'}
+                </p>
+              </div>
+            </div>
+            {pendingOfflineExams > 0 && (
+              <button
+                type="button"
+                onClick={() => syncOfflineExams()}
+                className="inline-flex items-center justify-center gap-2 border border-amber-300 bg-white hover:bg-amber-100 active:bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold text-sm transition-colors"
+              >
+                <Save className="w-4 h-4" />
+                Sincronizar agora
+              </button>
+            )}
+          </section>
+        )}
+
         {/* 1. IDENTIFICATION */}
         <section
           ref={(el) => { sectionRefs.current['identification'] = el; }}
@@ -1310,30 +1350,6 @@ export default function App() {
           </div>
         </section>
 
-        {pendingOfflineExams > 0 && (
-          <section className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
-              <div>
-                <p className="text-sm font-bold text-amber-900">
-                  {pendingOfflineExams} exame(s) aguardando sincronização
-                </p>
-                <p className="text-xs text-amber-700 mt-1">
-                  Os dados estão guardados neste aparelho e serão enviados quando houver internet.
-                </p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => syncOfflineExams()}
-              className="inline-flex items-center justify-center gap-2 border border-amber-300 bg-white hover:bg-amber-100 active:bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-bold text-sm transition-colors"
-            >
-              <Save className="w-4 h-4" />
-              Sincronizar agora
-            </button>
-          </section>
-        )}
-
         {/* Actions */}
         <section className="flex flex-col sm:flex-row gap-3 pb-8">
           <button
@@ -1346,7 +1362,7 @@ export default function App() {
             ) : (
               <Save className="w-5 h-5" />
             )}
-            {saving ? 'Salvando...' : 'Salvar Exame'}
+            {saving ? 'Salvando...' : isOnline ? 'Salvar Exame' : 'Salvar no aparelho'}
           </button>
 
           <button
