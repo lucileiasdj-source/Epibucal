@@ -1,6 +1,6 @@
-# CHANGELOG — SaudeBucalApp
+﻿# CHANGELOG — Epibucal
 
-Registro cronologico de todas as alteracoes realizadas no projeto SaudeBucalApp (PROFSMOC II).
+Registro cronologico de todas as alteracoes realizadas no projeto Epibucal (PROFSMOC II).
 Formato baseado em Keep a Changelog (https://keepachangelog.com/pt-BR/1.1.0/).
 
 ---

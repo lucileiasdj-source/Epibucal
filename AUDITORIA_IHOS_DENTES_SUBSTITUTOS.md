@@ -1,5 +1,5 @@
-# AUDITORIA METODOLÓGICA — IHOS: REGRA DE DENTES SUBSTITUTOS
-## SaudeBucalApp · Análise de Conformidade com OMS/2013 e SBBrasil 2010
+﻿# AUDITORIA METODOLÓGICA — IHOS: REGRA DE DENTES SUBSTITUTOS
+## Epibucal · Análise de Conformidade com OMS/2013 e SBBrasil 2010
 ### Junho de 2026
 
 ---
@@ -385,7 +385,7 @@ Quando a substituição não é realizada, os participantes que mais necessitari
 
 ### 4.3 Impacto na comparabilidade com dados do SBBrasil
 
-Os dados do SBBrasil 2010 foram coletados com a regra de substituição. Se o SaudeBucalApp for usado para comparar resultados com o SBBrasil, a ausência de substituição tornará os valores de IHOS **não comparáveis** com os dados nacionais para populações adultas e idosas.
+Os dados do SBBrasil 2010 foram coletados com a regra de substituição. Se o Epibucal for usado para comparar resultados com o SBBrasil, a ausência de substituição tornará os valores de IHOS **não comparáveis** com os dados nacionais para populações adultas e idosas.
 
 Para a população de 12 anos (grupo prioritário de muitos levantamentos escolares), o impacto é **menor**, pois a perda de primeiros molares é rara nessa idade. Porém, mesmo em adolescentes, o dente 16 pode estar ausente por extração precoce ou agenesia, e o protocolo de substituição ainda se aplica.
 
@@ -402,7 +402,7 @@ Fontes estimadas: SBBrasil 2010 (Ministério da Saúde, 2012); WHO Global Oral H
 
 ### 4.5 Avaliação de risco para o contexto de uso atual
 
-O SaudeBucalApp foi desenvolvido para uso na **UniOpen** e em estudos com foco em **estudantes universitários e escolares**. Para este público específico:
+O Epibucal foi desenvolvido para uso na **UniOpen** e em estudos com foco em **estudantes universitários e escolares**. Para este público específico:
 
 - Faixa etária predominante: 17–30 anos
 - Prevalência de perda de primeiro molar: estimada em 10–25%
@@ -448,7 +448,7 @@ Implementar a estrutura completa de `IHOS_SEXTANTS` com rastreamento do dente ef
 
 Até que a implementação completa seja realizada, o relatório de validação metodológica do sistema e qualquer publicação produzida com esses dados devem incluir a seguinte nota de rodapé:
 
-> *"O registro do IHOS no SaudeBucalApp v1.0 não implementa a regra de substituição de dentes índice prevista em Greene e Vermillion (1964) e OMS (2013). Quando o dente índice primário estava ausente, o sextante correspondente foi excluído do cálculo em vez de ser avaliado com o dente substituto. Este procedimento pode subestimar o IHOS em participantes com perda dentária."*
+> *"O registro do IHOS no Epibucal v1.0 não implementa a regra de substituição de dentes índice prevista em Greene e Vermillion (1964) e OMS (2013). Quando o dente índice primário estava ausente, o sextante correspondente foi excluído do cálculo em vez de ser avaliado com o dente substituto. Este procedimento pode subestimar o IHOS em participantes com perda dentária."*
 
 ---
 

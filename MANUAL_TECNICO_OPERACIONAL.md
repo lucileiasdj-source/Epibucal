@@ -1,5 +1,5 @@
-# MANUAL TÉCNICO E OPERACIONAL
-## SaudeBucalApp — Sistema de Coleta Epidemiológica em Saúde Bucal
+﻿# MANUAL TÉCNICO E OPERACIONAL
+## Epibucal — Sistema de Coleta Epidemiológica em Saúde Bucal
 ### Versão 1.0 · Junho de 2026
 
 ---
@@ -36,7 +36,7 @@
 
 ## 1. APRESENTAÇÃO DO SISTEMA
 
-O **SaudeBucalApp** é uma plataforma digital de coleta de dados epidemiológicos em saúde bucal, desenvolvida para apoiar pesquisas de campo e levantamentos populacionais. O sistema digitaliza e estrutura o processo de exame clínico odontológico, permitindo o registro padronizado de indicadores como o Índice CPOD (Cariados, Perdidos e Obturados) e o IHOS (Índice de Higiene Oral Simplificado), além de condições de prótese e necessidade de tratamento.
+O **Epibucal** é uma plataforma digital de coleta de dados epidemiológicos em saúde bucal, desenvolvida para apoiar pesquisas de campo e levantamentos populacionais. O sistema digitaliza e estrutura o processo de exame clínico odontológico, permitindo o registro padronizado de indicadores como o Índice CPOD (Cariados, Perdidos e Obturados) e o IHOS (Índice de Higiene Oral Simplificado), além de condições de prótese e necessidade de tratamento.
 
 A plataforma foi projetada com foco em **usabilidade em campo**, priorizando o uso em tablets e dispositivos móveis durante a realização de exames clínicos em ambiente escolar, unidades de saúde ou eventos institucionais como a **UniOpen**.
 
@@ -1253,4 +1253,4 @@ URGÊNCIA: 2 (eletivo)
 ---
 
 *Documento gerado em junho de 2026.*
-*SaudeBucalApp v1.0 — Plataforma de Coleta Epidemiológica em Saúde Bucal*
+*Epibucal v1.0 — Plataforma de Coleta Epidemiológica em Saúde Bucal*

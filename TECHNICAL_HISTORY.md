@@ -1,6 +1,6 @@
-# HISTORICO TECNICO — SaudeBucalApp
+﻿# HISTORICO TECNICO — Epibucal
 
-Documentacao das principais decisoes de desenvolvimento, problemas enfrentados, solucoes adotadas e licoes aprendidas durante a construcao do SaudeBucalApp (PROFSMOC II).
+Documentacao das principais decisoes de desenvolvimento, problemas enfrentados, solucoes adotadas e licoes aprendidas durante a construcao do Epibucal (PROFSMOC II).
 
 ---
 
@@ -186,7 +186,7 @@ A exportacao CSV que funcionava no desktop falhava em navegadores moveis. Testes
 ## 6. Arquitetura Atual
 
 ```
-SaudeBucalApp
+Epibucal
 ├── Frontend (React + Vite)
 │   ├── App.tsx ................ Formulario principal (1200 linhas)
 │   ├── InstallBanner.tsx ...... PWA install prompt

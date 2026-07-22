@@ -1,6 +1,6 @@
-# BUG LOG — SaudeBucalApp
+﻿# BUG LOG — Epibucal
 
-Historico completo de bugs identificados, corrigidos e monitorados durante o desenvolvimento do projeto SaudeBucalApp (PROFSMOC II).
+Historico completo de bugs identificados, corrigidos e monitorados durante o desenvolvimento do projeto Epibucal (PROFSMOC II).
 
 ---
 

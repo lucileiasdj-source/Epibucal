@@ -1,10 +1,10 @@
-# RELATÓRIO DE VALIDAÇÃO METODOLÓGICA
-## SaudeBucalApp — Análise dos Cálculos Epidemiológicos Implementados
+﻿# RELATÓRIO DE VALIDAÇÃO METODOLÓGICA
+## Epibucal — Análise dos Cálculos Epidemiológicos Implementados
 ### Versão 1.0 · Junho de 2026
 
 ---
 
-> **Objetivo:** Verificar a conformidade dos cálculos epidemiológicos implementados no SaudeBucalApp com as normas da Organização Mundial da Saúde (OMS/2013) e com a metodologia do levantamento SBBrasil 2010, identificando inconsistências e pontos que requerem revisão.
+> **Objetivo:** Verificar a conformidade dos cálculos epidemiológicos implementados no Epibucal com as normas da Organização Mundial da Saúde (OMS/2013) e com a metodologia do levantamento SBBrasil 2010, identificando inconsistências e pontos que requerem revisão.
 >
 > **Metodologia desta análise:** Leitura direta do código-fonte com extração de evidências por número de linha e trecho exato de código.
 >
@@ -32,7 +32,7 @@
 
 ## 1. PARECER GERAL
 
-O SaudeBucalApp implementa de forma **substancialmente correta** os principais indicadores epidemiológicos em saúde bucal utilizados em levantamentos populacionais. Os cálculos do índice CPOD e do IHOS reproduzem adequadamente as fórmulas de referência da OMS e do SBBrasil. Foram identificadas **5 inconsistências** de gravidade variada e **8 pontos de revisão** que não invalidam os dados já coletados, mas que devem ser corrigidos antes de estudos com maior rigor metodológico.
+O Epibucal implementa de forma **substancialmente correta** os principais indicadores epidemiológicos em saúde bucal utilizados em levantamentos populacionais. Os cálculos do índice CPOD e do IHOS reproduzem adequadamente as fórmulas de referência da OMS e do SBBrasil. Foram identificadas **5 inconsistências** de gravidade variada e **8 pontos de revisão** que não invalidam os dados já coletados, mas que devem ser corrigidos antes de estudos com maior rigor metodológico.
 
 **Resumo executivo:**
 
@@ -863,5 +863,5 @@ Detectar combinações impossíveis como "prótese total + dentes presentes".
 
 ---
 
-*Relatório gerado em junho de 2026 com base na análise direta do código-fonte do SaudeBucalApp v1.0.*
+*Relatório gerado em junho de 2026 com base na análise direta do código-fonte do Epibucal v1.0.*
 *Todos os trechos de código apresentados foram extraídos dos arquivos originais com indicação de número de linha.*

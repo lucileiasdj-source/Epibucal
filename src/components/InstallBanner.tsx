@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+﻿import { useState, useEffect, useCallback } from 'react';
 import { Download, X, Smartphone } from 'lucide-react';
 
 interface BeforeInstallPromptEvent extends Event {
@@ -100,7 +100,7 @@ export function InstallBanner() {
           <Download className="w-5 h-5" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-bold leading-tight">Instalar SaudeBucalApp</p>
+          <p className="text-sm font-bold leading-tight">Instalar Epibucal</p>
           <p className="text-xs text-teal-100 mt-1 leading-snug">
             Adicione a tela inicial para acesso rapido, mesmo sem internet.
           </p>

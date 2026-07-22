@@ -1,4 +1,4 @@
-var CACHE_NAME = 'epibucal-offline-v6';
+var CACHE_NAME = 'epibucal-offline-v7';
 
 var PRECACHE_URLS = [
   '/',

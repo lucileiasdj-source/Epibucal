@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+﻿import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { supabase } from './lib/supabase';
 import { InstallBanner, InstallHeaderButton } from './components/InstallBanner';
 import { IhosSelect } from './components/IhosSelect';
@@ -979,10 +979,10 @@ export default function App() {
           <div className="flex items-center gap-3">
             <div className="text-right">
               <p className="text-base sm:text-lg font-extrabold text-teal-700 leading-tight tracking-wide">
-                PROFSMOC II
+                Epibucal
               </p>
               <p className="text-xs sm:text-sm text-slate-500 font-medium leading-tight">
-                Coleta Epidemiológica em Saúde Bucal
+                Coleta epidemiológica em saúde bucal · PROFSMOC II
               </p>
             </div>
           </div>

@@ -1,7 +1,7 @@
 {
-  "name": "SaúdeBucalApp",
-  "short_name": "SaúdeBucalApp",
-  "description": "Coleta e Analise Epidemiologica em Saude Bucal",
+  "name": "Epibucal",
+  "short_name": "Epibucal",
+  "description": "Ferramenta digital para coleta epidemiologica em saude bucal",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
