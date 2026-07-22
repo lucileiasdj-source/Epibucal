@@ -1,6 +1,6 @@
-﻿# CHANGELOG — Epibucal
+﻿# CHANGELOG — EpiBucal
 
-Registro cronologico de todas as alteracoes realizadas no projeto Epibucal (PROFSMOC II).
+Registro cronologico de todas as alteracoes realizadas no projeto EpiBucal (PROFSMOC II).
 Formato baseado em Keep a Changelog (https://keepachangelog.com/pt-BR/1.1.0/).
 
 ---

@@ -1,6 +1,6 @@
-﻿# BUG LOG — Epibucal
+﻿# BUG LOG — EpiBucal
 
-Historico completo de bugs identificados, corrigidos e monitorados durante o desenvolvimento do projeto Epibucal (PROFSMOC II).
+Historico completo de bugs identificados, corrigidos e monitorados durante o desenvolvimento do projeto EpiBucal (PROFSMOC II).
 
 ---
 

@@ -979,7 +979,7 @@ export default function App() {
           <div className="flex items-center gap-3">
             <div className="text-right">
               <p className="text-base sm:text-lg font-extrabold text-teal-700 leading-tight tracking-wide">
-                Epibucal
+                EpiBucal
               </p>
               <p className="text-xs sm:text-sm text-slate-500 font-medium leading-tight">
                 Coleta epidemiológica em saúde bucal · PROFSMOC II

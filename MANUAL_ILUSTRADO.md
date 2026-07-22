@@ -1,5 +1,5 @@
 ﻿# MANUAL TÉCNICO E OPERACIONAL ILUSTRADO
-## Epibucal — Sistema de Coleta Epidemiológica em Saúde Bucal
+## EpiBucal — Sistema de Coleta Epidemiológica em Saúde Bucal
 ### Versão 1.0 Ilustrada · Junho de 2026
 
 ---
@@ -15,7 +15,7 @@
 
 | Figura | Descrição | Seção |
 |--------|-----------|-------|
-| Figura 1.1 | Tela inicial do Epibucal — visão geral do formulário | Sec. 1 |
+| Figura 1.1 | Tela inicial do EpiBucal — visão geral do formulário | Sec. 1 |
 | Figura 1.2 | Cabeçalho com indicadores CPOD e IHOS em tempo real | Sec. 1 |
 | Figura 3.1 | Barra de navegação por seções (menu sticky) | Sec. 3 |
 | Figura 4.1 | Diagrama de arquitetura do sistema | Sec. 4 |
@@ -77,7 +77,7 @@
 
 ## 1. APRESENTAÇÃO DO SISTEMA
 
-O **Epibucal** é uma plataforma digital de coleta de dados epidemiológicos em saúde bucal, desenvolvida para apoiar pesquisas de campo e levantamentos populacionais. O sistema digitaliza e estrutura o processo de exame clínico odontológico, permitindo o registro padronizado de indicadores como o Índice CPOD (Cariados, Perdidos e Obturados) e o IHOS (Índice de Higiene Oral Simplificado), além de condições de prótese e necessidade de tratamento.
+O **EpiBucal** é uma plataforma digital de coleta de dados epidemiológicos em saúde bucal, desenvolvida para apoiar pesquisas de campo e levantamentos populacionais. O sistema digitaliza e estrutura o processo de exame clínico odontológico, permitindo o registro padronizado de indicadores como o Índice CPOD (Cariados, Perdidos e Obturados) e o IHOS (Índice de Higiene Oral Simplificado), além de condições de prótese e necessidade de tratamento.
 
 A plataforma foi projetada com foco em **usabilidade em campo**, priorizando o uso em tablets e dispositivos móveis durante a realização de exames clínicos em ambiente escolar, unidades de saúde ou eventos institucionais como a **UniOpen**.
 
@@ -103,7 +103,7 @@ A plataforma foi projetada com foco em **usabilidade em campo**, priorizando o u
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Figura 1.1** — Interface inicial do Epibucal exibindo o formulário de exame clínico epidemiológico em estado inicial, com indicadores CPOD e IHOS ainda sem valores registrados. A barra de navegação superior permite acesso rápido às sete seções do formulário. Fonte: Elaborado pelos autores (2026).
+**Figura 1.1** — Interface inicial do EpiBucal exibindo o formulário de exame clínico epidemiológico em estado inicial, com indicadores CPOD e IHOS ainda sem valores registrados. A barra de navegação superior permite acesso rápido às sete seções do formulário. Fonte: Elaborado pelos autores (2026).
 
 ---
 
@@ -129,11 +129,11 @@ A plataforma foi projetada com foco em **usabilidade em campo**, priorizando o u
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Figura 1.2** — Detalhe do cabeçalho do Epibucal com indicadores CPOD e IHOS atualizados em tempo real durante o preenchimento do formulário. Os valores são recalculados automaticamente a cada interação do examinador, sem necessidade de confirmação. Fonte: Elaborado pelos autores (2026).
+**Figura 1.2** — Detalhe do cabeçalho do EpiBucal com indicadores CPOD e IHOS atualizados em tempo real durante o preenchimento do formulário. Os valores são recalculados automaticamente a cada interação do examinador, sem necessidade de confirmação. Fonte: Elaborado pelos autores (2026).
 
 ---
 
-**Tabela 1.1** — Tecnologias utilizadas no desenvolvimento do Epibucal e suas respectivas funções na arquitetura do sistema.
+**Tabela 1.1** — Tecnologias utilizadas no desenvolvimento do EpiBucal e suas respectivas funções na arquitetura do sistema.
 
 | Camada | Tecnologia | Versão | Função |
 |--------|------------|--------|--------|
@@ -189,11 +189,11 @@ Prover uma ferramenta digital padronizada para coleta, armazenamento e exportaç
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Figura 3.1** — Barra de navegação por seções do Epibucal. O componente é fixo ao topo da tela durante a rolagem (*sticky*), permitindo ao examinador navegar entre as sete seções do formulário sem perder o contexto visual. O botão da seção ativa é exibido com destaque visual. Fonte: Elaborado pelos autores (2026).
+**Figura 3.1** — Barra de navegação por seções do EpiBucal. O componente é fixo ao topo da tela durante a rolagem (*sticky*), permitindo ao examinador navegar entre as sete seções do formulário sem perder o contexto visual. O botão da seção ativa é exibido com destaque visual. Fonte: Elaborado pelos autores (2026).
 
 ---
 
-**Tabela 3.1** — Funcionalidades implementadas no Epibucal, versão 1.0.
+**Tabela 3.1** — Funcionalidades implementadas no EpiBucal, versão 1.0.
 
 | # | Funcionalidade | Seção do formulário | Status |
 |---|---------------|---------------------|--------|
@@ -249,11 +249,11 @@ Fonte: Elaborado pelos autores com base no código-fonte do projeto (2026).
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Figura 4.1** — Diagrama de arquitetura do Epibucal, ilustrando as três camadas do sistema: interface de usuário (React SPA), funções serverless (Supabase Edge Functions em Deno) e banco de dados relacional (PostgreSQL com Row Level Security). A comunicação entre camadas ocorre via protocolo HTTPS com autenticação por token anônimo. Fonte: Elaborado pelos autores (2026).
+**Figura 4.1** — Diagrama de arquitetura do EpiBucal, ilustrando as três camadas do sistema: interface de usuário (React SPA), funções serverless (Supabase Edge Functions em Deno) e banco de dados relacional (PostgreSQL com Row Level Security). A comunicação entre camadas ocorre via protocolo HTTPS com autenticação por token anônimo. Fonte: Elaborado pelos autores (2026).
 
 ---
 
-**Tabela 4.1** — Componentes do sistema Epibucal, suas localizações no projeto e respectivas responsabilidades.
+**Tabela 4.1** — Componentes do sistema EpiBucal, suas localizações no projeto e respectivas responsabilidades.
 
 | Componente | Arquivo | Responsabilidade |
 |------------|---------|-----------------|
@@ -302,7 +302,7 @@ Fonte: Elaborado pelos autores com base na estrutura de arquivos do projeto (202
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Figura 5.1** — Diagrama entidade-relacionamento (ER) do banco de dados do Epibucal. A tabela `exams` mantém relacionamento 1:N com `tooth_records` por meio de chave estrangeira com exclusão em cascata (`ON DELETE CASCADE`). A tabela `access_logs` é independente e armazena eventos de auditoria de acesso. Fonte: Elaborado pelos autores com base nas migrações SQL do projeto (2026).
+**Figura 5.1** — Diagrama entidade-relacionamento (ER) do banco de dados do EpiBucal. A tabela `exams` mantém relacionamento 1:N com `tooth_records` por meio de chave estrangeira com exclusão em cascata (`ON DELETE CASCADE`). A tabela `access_logs` é independente e armazena eventos de auditoria de acesso. Fonte: Elaborado pelos autores com base nas migrações SQL do projeto (2026).
 
 ---
 
@@ -370,7 +370,7 @@ Fonte: Elaborado pelos autores com base na migração `20260529121604_create_acc
 
 ---
 
-**Tabela 5.4** — Políticas de segurança Row Level Security (RLS) configuradas no banco de dados do Epibucal.
+**Tabela 5.4** — Políticas de segurança Row Level Security (RLS) configuradas no banco de dados do EpiBucal.
 
 | Tabela | Operação | Perfil permitido | Justificativa |
 |--------|----------|-----------------|---------------|
@@ -488,7 +488,7 @@ Fonte: WHO (2013).
 
 ---
 
-**Tabela 6.7** — Códigos de urgência de tratamento utilizados no Epibucal.
+**Tabela 6.7** — Códigos de urgência de tratamento utilizados no EpiBucal.
 
 | Código | Descrição | Definição clínica |
 |--------|-----------|------------------|
@@ -568,7 +568,7 @@ Fonte: Elaborado pelos autores com base em Klein, Palmer e Knutson (1938) e impl
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Figura 7.1** — Fluxograma completo do processo de coleta de dados no Epibucal. O fluxo percorre sequencialmente sete seções, com validação em duas etapas (frontend e backend) antes da persistência dos dados. Em caso de erro de validação, o sistema exibe a mensagem correspondente e mantém os dados preenchidos para correção pelo examinador. Fonte: Elaborado pelos autores (2026).
+**Figura 7.1** — Fluxograma completo do processo de coleta de dados no EpiBucal. O fluxo percorre sequencialmente sete seções, com validação em duas etapas (frontend e backend) antes da persistência dos dados. Em caso de erro de validação, o sistema exibe a mensagem correspondente e mantém os dados preenchidos para correção pelo examinador. Fonte: Elaborado pelos autores (2026).
 
 ---
 
@@ -606,7 +606,7 @@ Fonte: Elaborado pelos autores com base em Klein, Palmer e Knutson (1938) e impl
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Figura 8.1** — Seção de Identificação do Participante do Epibucal, exibindo os seis campos de preenchimento obrigatório: código do participante, idade, sexo, escola/local de coleta, nome do examinador e data da coleta. Os campos marcados com asterisco (*) são de preenchimento obrigatório e são validados antes do salvamento. Fonte: Elaborado pelos autores (2026).
+**Figura 8.1** — Seção de Identificação do Participante do EpiBucal, exibindo os seis campos de preenchimento obrigatório: código do participante, idade, sexo, escola/local de coleta, nome do examinador e data da coleta. Os campos marcados com asterisco (*) são de preenchimento obrigatório e são validados antes do salvamento. Fonte: Elaborado pelos autores (2026).
 
 ---
 
@@ -635,7 +635,7 @@ Fonte: Elaborado pelos autores com base em Klein, Palmer e Knutson (1938) e impl
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Figura 8.2** — Seção IHOS do Epibucal exibindo a grade dos seis dentes índice (16, 11, 26, 31, 36 e 46) com seus respectivos botões de seleção de escore (0 a 3 e 9). A codificação cromática dos botões facilita a identificação visual dos escores: verde (0 = sem placa), amarelo (1 = até 1/3), laranja (2 = 1/3 a 2/3), vermelho (3 = mais de 2/3) e branco (9 = não registrado). Fonte: Elaborado pelos autores (2026).
+**Figura 8.2** — Seção IHOS do EpiBucal exibindo a grade dos seis dentes índice (16, 11, 26, 31, 36 e 46) com seus respectivos botões de seleção de escore (0 a 3 e 9). A codificação cromática dos botões facilita a identificação visual dos escores: verde (0 = sem placa), amarelo (1 = até 1/3), laranja (2 = 1/3 a 2/3), vermelho (3 = mais de 2/3) e branco (9 = não registrado). Fonte: Elaborado pelos autores (2026).
 
 ---
 
@@ -690,7 +690,7 @@ Fonte: Elaborado pelos autores com base em Klein, Palmer e Knutson (1938) e impl
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Figura 8.4** — Seção Condição da Coroa do Epibucal com a arcada superior expandida (dentes 18 a 28), demonstrando a codificação cromática dos dez códigos de condição dentária. Cada dente exibe seu número FDI e um conjunto de botões coloridos correspondentes aos códigos 0 a 9. O sistema calcula e exibe o índice CPOD em tempo real no painel lateral conforme os códigos são selecionados. Fonte: Elaborado pelos autores (2026).
+**Figura 8.4** — Seção Condição da Coroa do EpiBucal com a arcada superior expandida (dentes 18 a 28), demonstrando a codificação cromática dos dez códigos de condição dentária. Cada dente exibe seu número FDI e um conjunto de botões coloridos correspondentes aos códigos 0 a 9. O sistema calcula e exibe o índice CPOD em tempo real no painel lateral conforme os códigos são selecionados. Fonte: Elaborado pelos autores (2026).
 
 ---
 
@@ -758,7 +758,7 @@ Fonte: Elaborado pelos autores com base em Klein, Palmer e Knutson (1938) e impl
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Figura 8.7** — Seção de Uso de Prótese do Epibucal, exibindo os grupos de seleção para as arcadas superior e inferior. O sistema oferece quatro opções para cada arcada (sem prótese, parcial, total e não registrado), com codificação cromática consistente: verde para ausência de prótese, tons de âmbar/laranja para próteses presentes e branco para não registrado. Fonte: Elaborado pelos autores (2026).
+**Figura 8.7** — Seção de Uso de Prótese do EpiBucal, exibindo os grupos de seleção para as arcadas superior e inferior. O sistema oferece quatro opções para cada arcada (sem prótese, parcial, total e não registrado), com codificação cromática consistente: verde para ausência de prótese, tons de âmbar/laranja para próteses presentes e branco para não registrado. Fonte: Elaborado pelos autores (2026).
 
 ---
 
@@ -781,7 +781,7 @@ Fonte: Elaborado pelos autores com base em Klein, Palmer e Knutson (1938) e impl
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Figura 8.8** — Seção de Necessidade de Prótese do Epibucal. Para cada arcada, o examinador seleciona entre cinco opções que avaliam a extensão da necessidade reabilitadora protética, seguindo os critérios da OMS (2013). A codificação de cores utiliza gradiente verde-âmbar-laranja-vermelho para indicar crescente complexidade de tratamento necessário. Fonte: Elaborado pelos autores (2026).
+**Figura 8.8** — Seção de Necessidade de Prótese do EpiBucal. Para cada arcada, o examinador seleciona entre cinco opções que avaliam a extensão da necessidade reabilitadora protética, seguindo os critérios da OMS (2013). A codificação de cores utiliza gradiente verde-âmbar-laranja-vermelho para indicar crescente complexidade de tratamento necessário. Fonte: Elaborado pelos autores (2026).
 
 ---
 
@@ -807,7 +807,7 @@ Fonte: Elaborado pelos autores com base em Klein, Palmer e Knutson (1938) e impl
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Figura 8.9** — Seção de Urgência de Tratamento do Epibucal, exibindo as cinco categorias de necessidade de tratamento com codificação cromática intuitiva. A opção "3 — Urgente" (vermelho) sinaliza ao pesquisador a necessidade de encaminhamento imediato do participante para atenção odontológica. Fonte: Elaborado pelos autores (2026).
+**Figura 8.9** — Seção de Urgência de Tratamento do EpiBucal, exibindo as cinco categorias de necessidade de tratamento com codificação cromática intuitiva. A opção "3 — Urgente" (vermelho) sinaliza ao pesquisador a necessidade de encaminhamento imediato do participante para atenção odontológica. Fonte: Elaborado pelos autores (2026).
 
 ---
 
@@ -834,7 +834,7 @@ Fonte: Elaborado pelos autores com base em Klein, Palmer e Knutson (1938) e impl
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Figura 8.10** — Seção de Resumo do Epibucal exibindo o painel consolidado de todos os indicadores do exame: componentes C, P, O e total do CPOD; resultado e classificação do IHOS; e distribuição das seis categorias de condição dentária. Esta seção permite ao examinador revisar e confirmar todos os dados antes do salvamento definitivo. Fonte: Elaborado pelos autores (2026).
+**Figura 8.10** — Seção de Resumo do EpiBucal exibindo o painel consolidado de todos os indicadores do exame: componentes C, P, O e total do CPOD; resultado e classificação do IHOS; e distribuição das seis categorias de condição dentária. Esta seção permite ao examinador revisar e confirmar todos os dados antes do salvamento definitivo. Fonte: Elaborado pelos autores (2026).
 
 ---
 
@@ -856,7 +856,7 @@ Fonte: Elaborado pelos autores com base em Klein, Palmer e Knutson (1938) e impl
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Figura 8.11** — Botões de ação do Epibucal localizados na seção de Resumo. Da esquerda para a direita: "Salvar Exame" persiste os dados no banco de dados via Edge Function; "Exportar CSV" baixa todos os exames registrados em formato tabulado; "Limpar" reinicia o formulário para o próximo participante; "Excluir Exames Salvos" remove permanentemente todos os registros (com confirmação obrigatória). Fonte: Elaborado pelos autores (2026).
+**Figura 8.11** — Botões de ação do EpiBucal localizados na seção de Resumo. Da esquerda para a direita: "Salvar Exame" persiste os dados no banco de dados via Edge Function; "Exportar CSV" baixa todos os exames registrados em formato tabulado; "Limpar" reinicia o formulário para o próximo participante; "Excluir Exames Salvos" remove permanentemente todos os registros (com confirmação obrigatória). Fonte: Elaborado pelos autores (2026).
 
 ---
 
@@ -877,7 +877,7 @@ Fonte: Elaborado pelos autores com base em Klein, Palmer e Knutson (1938) e impl
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Figura 8.12** — Modal de confirmação de exclusão de todos os exames salvos no Epibucal. O sistema exige confirmação explícita do usuário antes de executar a operação irreversível de exclusão em massa, protegendo contra exclusões acidentais durante sessões de coleta de dados. Fonte: Elaborado pelos autores (2026).
+**Figura 8.12** — Modal de confirmação de exclusão de todos os exames salvos no EpiBucal. O sistema exige confirmação explícita do usuário antes de executar a operação irreversível de exclusão em massa, protegendo contra exclusões acidentais durante sessões de coleta de dados. Fonte: Elaborado pelos autores (2026).
 
 ---
 
@@ -899,7 +899,7 @@ Fonte: Elaborado pelos autores com base em Klein, Palmer e Knutson (1938) e impl
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Figura 9.1** — Notificação de erro de validação do Epibucal exibida quando o examinador tenta salvar o exame sem preencher todos os campos obrigatórios. O sistema valida os dados no frontend antes de qualquer comunicação com o servidor, fornecendo feedback imediato e específico sobre o campo que requer atenção. Fonte: Elaborado pelos autores (2026).
+**Figura 9.1** — Notificação de erro de validação do EpiBucal exibida quando o examinador tenta salvar o exame sem preencher todos os campos obrigatórios. O sistema valida os dados no frontend antes de qualquer comunicação com o servidor, fornecendo feedback imediato e específico sobre o campo que requer atenção. Fonte: Elaborado pelos autores (2026).
 
 ---
 
@@ -919,7 +919,7 @@ Fonte: Elaborado pelos autores com base em Klein, Palmer e Knutson (1938) e impl
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Figura 9.2** — Notificação de sucesso do Epibucal exibida após o salvamento bem-sucedido de um exame clínico. Após a confirmação pelo servidor, o sistema limpa automaticamente o formulário e reinicia todos os campos para os valores padrão, preparando a interface para o registro do próximo participante. Fonte: Elaborado pelos autores (2026).
+**Figura 9.2** — Notificação de sucesso do EpiBucal exibida após o salvamento bem-sucedido de um exame clínico. Após a confirmação pelo servidor, o sistema limpa automaticamente o formulário e reinicia todos os campos para os valores padrão, preparando a interface para o registro do próximo participante. Fonte: Elaborado pelos autores (2026).
 
 ---
 
@@ -1102,11 +1102,11 @@ A urgência de tratamento é registrada como avaliação global do participante,
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Figura 14.1** — Arquivo CSV exportado pelo Epibucal aberto no Microsoft Excel, exibindo as 56 colunas de dados epidemiológicos organizadas por exame (linhas). O arquivo utiliza ponto e vírgula como delimitador e codificação UTF-8, sendo compatível com os principais softwares de análise estatística utilizados em pesquisas de saúde bucal (SPSS, R, Stata, SAS). Fonte: Elaborado pelos autores (2026).
+**Figura 14.1** — Arquivo CSV exportado pelo EpiBucal aberto no Microsoft Excel, exibindo as 56 colunas de dados epidemiológicos organizadas por exame (linhas). O arquivo utiliza ponto e vírgula como delimitador e codificação UTF-8, sendo compatível com os principais softwares de análise estatística utilizados em pesquisas de saúde bucal (SPSS, R, Stata, SAS). Fonte: Elaborado pelos autores (2026).
 
 ---
 
-**Tabela 14.1** — Estrutura completa do arquivo CSV exportado pelo Epibucal, contendo 56 colunas organizadas em seis grupos temáticos.
+**Tabela 14.1** — Estrutura completa do arquivo CSV exportado pelo EpiBucal, contendo 56 colunas organizadas em seis grupos temáticos.
 
 | Grupo | Colunas | # colunas | Descrição |
 |-------|---------|-----------|-----------|
@@ -1124,7 +1124,7 @@ Fonte: Elaborado pelos autores com base no código de exportação em `src/App.t
 
 ## 15. VALIDAÇÃO DOS INDICADORES
 
-**Tabela 15.1** — Indicadores de qualidade e consistência dos dados exportados pelo Epibucal, recomendados para verificação pós-coleta.
+**Tabela 15.1** — Indicadores de qualidade e consistência dos dados exportados pelo EpiBucal, recomendados para verificação pós-coleta.
 
 | Verificação | Regra esperada | Ação em caso de inconsistência |
 |-------------|---------------|-------------------------------|
@@ -1144,7 +1144,7 @@ Fonte: Elaborado pelos autores (2026).
 
 ## 16. LIMITAÇÕES ATUAIS DO SISTEMA
 
-**Tabela 16.1** — Limitações identificadas na versão 1.0 do Epibucal, com impacto e prioridade de resolução.
+**Tabela 16.1** — Limitações identificadas na versão 1.0 do EpiBucal, com impacto e prioridade de resolução.
 
 | # | Limitação | Impacto na pesquisa | Prioridade |
 |---|-----------|---------------------|------------|
@@ -1165,7 +1165,7 @@ Fonte: Elaborado pelos autores (2026).
 
 ## 17. MELHORIAS FUTURAS
 
-**Tabela 17.1** — Melhorias planejadas para versões futuras do Epibucal, com benefício esperado e complexidade de implementação estimada.
+**Tabela 17.1** — Melhorias planejadas para versões futuras do EpiBucal, com benefício esperado e complexidade de implementação estimada.
 
 | # | Melhoria proposta | Benefício para a pesquisa | Complexidade |
 |---|------------------|--------------------------|-------------|
@@ -1219,11 +1219,11 @@ Fonte: Elaborado pelos autores (2026).
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Figura 18.1** — Fluxo operacional simplificado para examinadores do Epibucal. Os dez passos representam a sequência recomendada de preenchimento durante o exame clínico. O sistema calcula automaticamente os índices CPOD e IHOS após cada seleção (passos 4 e 5), eliminando o risco de erros de cálculo manual. Fonte: Elaborado pelos autores (2026).
+**Figura 18.1** — Fluxo operacional simplificado para examinadores do EpiBucal. Os dez passos representam a sequência recomendada de preenchimento durante o exame clínico. O sistema calcula automaticamente os índices CPOD e IHOS após cada seleção (passos 4 e 5), eliminando o risco de erros de cálculo manual. Fonte: Elaborado pelos autores (2026).
 
 ---
 
-**Tabela 18.1** — Erros comuns durante o uso do Epibucal em campo, com causas identificadas e soluções recomendadas.
+**Tabela 18.1** — Erros comuns durante o uso do EpiBucal em campo, com causas identificadas e soluções recomendadas.
 
 | Mensagem ou situação | Causa mais provável | Solução |
 |---------------------|--------------------|---------| 
@@ -1313,7 +1313,7 @@ EXECUTE.
 
 ## 20. REFERÊNCIAS METODOLÓGICAS
 
-**Tabela 20.1** — Referências metodológicas utilizadas na concepção e desenvolvimento do Epibucal.
+**Tabela 20.1** — Referências metodológicas utilizadas na concepção e desenvolvimento do EpiBucal.
 
 | # | Referência | Aplicação no sistema |
 |---|-----------|----------------------|
@@ -1331,7 +1331,7 @@ Fonte: Elaborado pelos autores (2026).
 
 ## APÊNDICE A — TABELA COMPLETA DOS 32 DENTES (FDI)
 
-**Tabela A.1** — Numeração FDI, denominação e características de cada dente permanente examinado no Epibucal.
+**Tabela A.1** — Numeração FDI, denominação e características de cada dente permanente examinado no EpiBucal.
 
 | Número FDI | Denominação | Arcada | Quadrante | Dente índice IHOS |
 |-----------|-------------|--------|-----------|:-----------------:|
@@ -1416,7 +1416,7 @@ Use esta lista para verificar que todas as capturas de tela foram realizadas ant
 ```
 ======================================================
 EXAME CLÍNICO EPIDEMIOLÓGICO — SAÚDE BUCAL
-Epibucal v1.0 · Registro de exemplo
+EpiBucal v1.0 · Registro de exemplo
 ======================================================
 Participante : P042              Data : 01/06/2026
 Idade        : 35 anos           Sexo : Feminino
@@ -1453,6 +1453,6 @@ URGÊNCIA: 2 (eletivo)
 
 ---
 
-*Manual Técnico e Operacional Ilustrado — Epibucal v1.0*
+*Manual Técnico e Operacional Ilustrado — EpiBucal v1.0*
 *Gerado em junho de 2026*
 *Para uso acadêmico, institucional e treinamento de pessoal*

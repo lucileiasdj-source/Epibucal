@@ -1,6 +1,6 @@
 {
-  "name": "Epibucal",
-  "short_name": "Epibucal",
+  "name": "EpiBucal",
+  "short_name": "EpiBucal",
   "description": "Ferramenta digital para coleta epidemiologica em saude bucal",
   "start_url": "/",
   "scope": "/",
